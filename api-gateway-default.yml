@@ -1,1 +1,32 @@
+spring:
+  cloud:
+    gateway:
+      routes:
 
+        - id: book-service
+          uri: lb://BOOK-SERVICE
+          predicates:
+            - Path=/api/v1/book/**
+            - Method=GET,POST
+          filters:
+            - StripPrefix=2
+
+        - id: review-service
+          uri: lb://REVIEW-SERVICE
+          predicates:
+              - Path=/api/v1/review/**
+              - Method=GET,POST
+          filters:
+              - StripPrefix=2
+              - name: ConfigurationFilterFactory
+                args:
+                  routeDescription: This is a description about the review service.
+
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/user/**
+            - Method=GET,POST
+          filters:
+            - StripPrefix=2
